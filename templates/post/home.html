@@ -1,0 +1,90 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+
+
+
+{% if search %}
+<h4>Click Home for HOME page</h4>
+
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+    {% for user in result %}
+       <div class='row'>
+       
+        <div class='col-sm-2'>
+            {% if user.user_profile.profile_pic %}
+              <a class="nav-link" href="#"><img src='/profile_pics/{{ user.user_profile.profile_pic }}' width='75px' height='75px' ></a>
+            {% else %} 
+              <a class="nav-link" href="{% url 'app_login:profile' %}"><img src='/media/profiel_pics/dummy.png' width='45px' height='75px' class='rounded_cirlce'></a> 
+            {% endif %} 
+        
+        </div>
+        <div class='col-sm-10'>
+            <a href='{% url 'app_login:user' username=user.username %}'><h6>{{ user.username }}</h6></a>
+            <h6>{{ user.user_profile.full_name }}</h6>
+
+        </div>
+       </div>
+    {% endfor %}
+
+{% else %}
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+
+
+
+
+
+    <!-- ======= My & Family Section ======= -->
+
+    {% for post in posts %}
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="section-title">
+         
+         
+        </div>
+
+        <div class="row content">
+          <div class="col-lg-6">
+            <img src=" /media/{{post.image}}/ " class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0">
+            
+            <ul>
+              <li><i class="ri-check-double-line"></i><h6>POSTED BY:<a href='{% url 'app_login:user' username=user.username %}'>{{ post.author }}</a></h6></li>
+              
+            </ul>
+            <p>
+              <i class="ri-check-double-line"></i>CAPTION:{{ post.caption }}
+            </p>
+             {% if post.pk in liked_post_list %}
+            <a href='{% url 'app_post:unliked' pk=post.pk %}'>&#9825;</a>
+
+             {% else %}
+             <a href='{% url 'app_post:liked' pk=post.pk %}'> &#10084;</a>
+             
+             {% endif %}
+           
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End My & Family Section -->
+
+    
+   
+    
+ 
+
+
+{% endfor %}
+
+
+{% endif %}
+
+{% endblock content %}

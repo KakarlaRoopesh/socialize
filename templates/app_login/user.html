@@ -1,0 +1,129 @@
+{% extends 'navbar.html' %}
+{% load  crispy_forms_tags %}
+
+{% block css_content %}
+
+<style>
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  padding: 0 6px;
+  float: left;
+  width: 24.99999%;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+    width: 49.99999%;
+    margin: 6px 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 100%;
+  }
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+
+{% endblock %}
+
+
+{% block content %}
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+<h1>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+
+{% if user.user_profile.profile_pic %}
+<a class="nav-link" href="{% url 'app_login:profile' %}"><img src='/profile_pics/{{ user.user_profile.profile_pic }}' width='30px' height='30px' ></a>
+{% else %} 
+<a class="nav-link" href="{% url 'app_login:profile' %}"><img src='/media/profiel_pics/dummy.png' width='220px' height='220px' class='rounded-cirlce'></a> 
+{% endif %}
+
+
+
+<h3> {{ user.username }} </h3>
+
+<a class="nav-link" href="{% url 'app_login:profile' %}">EDIT PROFILE</a>
+<h3> {{user.post.count}} POSTS &nbsp;&nbsp;&nbsp; {{user.follower.count}} FOLLOWERS &nbsp;&nbsp; {{user.following.count}} FOLLOWING     </h3>
+
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  POST PHOTO
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">POST PHOTOS</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+         <form method="POST"  enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit"  value="POST">
+    </form>
+    
+      
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<h3> {{user.user_profile.full_name }} </h3>
+<h3> {{user.user_profile.descritpion}} </h3>
+
+
+
+{% for post in user.post.all %}
+
+<div class="responsive">
+  <div class="gallery">
+    <a target="_blank" href="/media/{{ post.image }}">
+      <img src="/media/{{ post.image }}" alt="Cinque Terre" width="600" height="400">
+    </a>
+    <div class="desc">{{ post.caption }}</div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
