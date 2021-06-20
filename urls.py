@@ -1,23 +1,13 @@
+from unicodedata import name
+from django.urls import path
+from . import views 
 
 
-from django.conf.urls import url
-from django.contrib import admin
-from django.urls import path,include
-
-from django.conf import settings
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns,static
-
- 
+app_name = 'app_post'
 
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/',include('app_login.urls')),
-    path('',include('post.urls')),
-    
+urlpatterns= [
+    path('',views.home,name='home'),
+    path('liked/<pk>',views.liked,name='liked'),
+    path('liked/<pk>/',views.unliked,name='unliked'),
 ]
-
-
-
-urlpatterns += staticfiles_urlpatterns()
-urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
